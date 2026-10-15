@@ -1,0 +1,180 @@
+{
+  "pillars": [
+    {
+      "id": "hardware",
+      "code": "HW",
+      "name": "1. Hardware & Coil System",
+      "desc": "20 kHz – 1 MHz excitation coil, triaxial active guard & 6-layer reference phantoms",
+      "iconKey": "cpu",
+      "theme": "amber",
+      "subWorkflows": [
+        {
+          "id": "hw-probe",
+          "code": "1A",
+          "name": "Probe & Coil Fabrication",
+          "desc": "Pancake coil winding, MnZn ferrite cup core, Litz wire & active triaxial shielding (20 kHz – 1 MHz)",
+          "defaultTaskType": "fabrication"
+        },
+        {
+          "id": "hw-standards",
+          "code": "1B",
+          "name": "Reference Standards & 6-Layer Blocks",
+          "desc": "6-layer stratified metallic plates, 4-point Kelvin ground-truth & precision liftoff shims",
+          "defaultTaskType": "calibration"
+        }
+      ]
+    },
+    {
+      "id": "daq",
+      "code": "DAQ",
+      "name": "2. DAQ & Signal Processing",
+      "desc": "10-tone multisine (20 kHz – 1 MHz) I/Q demodulation, impedance transfer & C-scan mapping",
+      "iconKey": "activity",
+      "theme": "sky",
+      "subWorkflows": [
+        {
+          "id": "daq-algo",
+          "code": "2A",
+          "name": "Data Acquisition Algorithm & Demodulation",
+          "desc": "10-frequency Schroeder multisine (20 kHz – 1 MHz), synchronous I/Q lock-in & affine Z calibration",
+          "defaultTaskType": "acquisition"
+        },
+        {
+          "id": "daq-mapping",
+          "code": "2B",
+          "name": "Spatial C-Scan Mapping & Formatting",
+          "desc": "2D X-Y gantry synchronization, spatial grid mapping & calibrated .mat impedance tensor export",
+          "defaultTaskType": "mapping"
+        }
+      ]
+    },
+    {
+      "id": "algorithm",
+      "code": "ALG",
+      "name": "3. Inversion Algorithm",
+      "desc": "Analytical 6-layer forward solver, synthetic pretraining & Sim-to-Real conductivity tomography",
+      "iconKey": "brain",
+      "theme": "purple",
+      "subWorkflows": [
+        {
+          "id": "alg-sim",
+          "code": "3A",
+          "name": "Simulation Validation & Forward Modeling",
+          "desc": "Vectorized Dodd-Deeds 6-layer analytical solver (20 kHz – 1 MHz), COMSOL FEM & 80k synthetic dataset",
+          "defaultTaskType": "simulation"
+        },
+        {
+          "id": "alg-inversion",
+          "code": "3B",
+          "name": "Pretraining & 6-Layer Inversion Network",
+          "desc": "PINN/ResNet-1D synthetic pretraining, Sim-to-Real transfer & σ₁…σ₆ reconstruction",
+          "defaultTaskType": "inversion"
+        }
+      ]
+    }
+  ],
+  "timePeriods": [
+    {
+      "id": "2027-02",
+      "label": "March 2026",
+      "sub": "Simulation and Foward Model"
+    },
+    {
+      "id": "2026-08",
+      "label": "Apr 2026",
+      "sub": "Hardware Setup"
+    },
+    {
+      "id": "2026-09",
+      "label": "September 2026",
+      "sub": "10-Freq I/Q & PINN Pretraining"
+    },
+    {
+      "id": "2026-10",
+      "label": "October 2026",
+      "sub": "Active Calibration & Triax Loop"
+    },
+    {
+      "id": "2027-01",
+      "label": "January 2027",
+      "sub": "Empty Month (Click 🗑 to test delete)"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "ALG-01",
+      "title": "2D-3D Coherence",
+      "pillar": "algorithm",
+      "subWorkflow": "alg-sim",
+      "taskType": "simulation",
+      "period": "2026-10",
+      "dateLabel": "October 2026",
+      "status": "in-progress",
+      "probeVersion": "Probe-v2.1 (Litz + Guard)",
+      "freqConfig": "10 Log-Spaced Freqs (20 kHz – 1 MHz)",
+      "layerConfig": "6-Layer Stratified Specimen",
+      "summary": "This task is used to evaluate the coherence of building our forward model using the 2D axisymmetric method and the 3D method in COMSOL Multiphysics.",
+      "anomalies": "",
+      "githubUrl": "",
+      "githubLabel": "",
+      "driveUrl": "",
+      "driveLabel": "",
+      "dependencies": [],
+      "metrics": {
+        "Band": "20k–1MHz",
+        "Layers": "6 Layers",
+        "Updated": "October 2026"
+      }
+    },
+    {
+      "id": "ALG-02",
+      "title": "Data Preparation",
+      "pillar": "algorithm",
+      "subWorkflow": "alg-sim",
+      "taskType": "simulation",
+      "period": "2027-02",
+      "dateLabel": "March 2026",
+      "status": "completed",
+      "probeVersion": "A coil in simulation",
+      "freqConfig": "10 Log-Spaced Freqs (20 kHz – 1 MHz)",
+      "layerConfig": "6-Layer Stratified Specimen",
+      "summary": "Using a 2D axisymmetric model in COMSOL Multiphysics to generate a large number of impedance data. (150,000)",
+      "anomalies": "",
+      "githubUrl": "",
+      "githubLabel": "",
+      "driveUrl": "",
+      "driveLabel": "",
+      "dependencies": [],
+      "metrics": {
+        "Band": "20k–1MHz",
+        "Layers": "6 Layers",
+        "Updated": "March 2026"
+      }
+    },
+    {
+      "id": "ALG-03",
+      "title": "DNN Network",
+      "pillar": "algorithm",
+      "subWorkflow": "alg-inversion",
+      "taskType": "inversion",
+      "period": "2027-02",
+      "dateLabel": "March 2026",
+      "status": "completed",
+      "probeVersion": "A coil in simulation",
+      "freqConfig": "10 Log-Spaced Freqs (20 kHz – 1 MHz)",
+      "layerConfig": "6-Layer Stratified Specimen",
+      "summary": "Constructed a 20-feature-input, 6-feature-output DNN. \nFine-tuning was accomplished, marked as v1.",
+      "anomalies": "",
+      "githubUrl": "",
+      "githubLabel": "",
+      "driveUrl": "",
+      "driveLabel": "",
+      "dependencies": [],
+      "metrics": {
+        "Band": "20k–1MHz",
+        "Layers": "6 Layers",
+        "Updated": "March 2026"
+      }
+    }
+  ]
+}
